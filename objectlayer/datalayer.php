@@ -16,14 +16,15 @@ final class DataLayer {
     */
   private function __construct()
   {
-    $this->conn = new mysqli('localhost','databaseusername','databasepassword','databasename');
+	$json_a = json_decode(file_get_contents("datainfo.json"), true);
+    $this->conn = new mysqli($json_a['server'],$json_a['username'],$json_a['password'],$json_a['database']);
   }
 
   public function __destruct()
   {
     $this->conn->Close();
   }
-  
+
   //get all the fields for an object
   public function GetObjectData($object){
     if (!isset($object->id)){
@@ -60,7 +61,7 @@ final class DataLayer {
 
   public function GetKeywords(){
     $retval = array();
-    $sql_statement = "select keyword from product";
+    $sql_statement = "select keyword from productlive";
     $result = $this->conn->query($sql_statement);
     while($row = $result->fetch_assoc()) {
       array_push($retval, $row['keyword']);
@@ -68,36 +69,6 @@ final class DataLayer {
     return $retval;
 
   }
-  
-  // many-to-many relations
-  // deprecated
-  // public function GetRelatedIdsByProductId($productid, $relatedtable){
-  //   $retval = array();
-  //   $sql_statement = "select " . $relatedtable . "id from product" . $relatedtable . " where productid = ";
-  //   if ($productid == null){
-  //     $sql_statement .= 'null';
-  //   }
-  //   else {
-  //     $sql_statement .= $productid;
-  //   }
-  //   $result = $this->conn->query($sql_statement);
-  //   while($row = $result->fetch_assoc()) {
-  //     array_push($retval, $row[$relatedtable . 'id']);
-  //   }
-  //   return $retval;
-  // }
-  // deprecated
-  // public function SaveRelatedProductObject($productid, $relatedtable, $relatedid){
-  //   // right now what we're going to do is if the relationship exists we're just going to leave it alone
-  //   $relatedidfield = str_replace('product', '', $relatedtable) . 'id';
-  //   $sql_statement = "select count(id) as countid from $relatedtable where productid = $productid and $relatedidfield = $relatedid";
-  //   $result = $this->conn->query($sql_statement);
-  //   $record = $result->fetch_array(); 
-  //   if (!$record[0]){
-  //     $sql_statement = "insert into $relatedtable (productid, $relatedidfield) values ($productid, $relatedid);";
-  //     $result = $this->conn->query($sql_statement);
-  //   }    
-  // }
   
   public function GetObjectIds($classname, $filter=null, $sortby=null, $sortdirection=null){
     $retval = array();
@@ -136,7 +107,17 @@ final class DataLayer {
         foreach($object as $field => $value) {
           if ($field != 'id'){
             $field_list .= $field . ', ';
-            $value_list .= '"' . $value . '", ';
+            if (datalayer::field_is_timestamp($field)){
+              $value_list .= 'now(), ';
+            } else if (datalayer::field_is_boolean($field)){
+              if ($value){
+                $value_list .= '"1", ';  
+              } else {
+                $value_list .= 'null, ';  
+              }
+            } else {
+              $value_list .= '"' . $value . '", ';
+            }
           }
         }
         $field_list = rtrim(rtrim($field_list),',');
@@ -144,27 +125,36 @@ final class DataLayer {
         $execute_sql = 'insert into ' . get_class($object) . '(' . $field_list . ') values (' . $value_list . ');';
         $this->conn->query($execute_sql);
         $object->id = $this->conn->insert_id;
-      }
-    // else update
-      else {
-		  $set_list = '';
-		  foreach($object as $field => $value) {
-			  if ($field != 'id'){
-				  if (isset($value)){
-					  $value = '"' . $value . '"';
-				  }
-				  else {
-					  $value = '""';					  
-				  }
-				  $set_list .= $field . ' = ' . $value . ', ';
-			  }
-		  }
-		  $set_list = rtrim(rtrim($set_list),',');
-		  $execute_sql = 'update ' . get_class($object) . ' set ' . $set_list . ' where id = ' . $object->id;
-		  $this->conn->query($execute_sql);
+      } else { // else update
+        $set_list = '';
+        foreach($object as $field => $value) {
+          if ($field != 'id'){
+            if (datalayer::field_is_timestamp($field)){
+              $value = 'now()';
+            } else if (datalayer::field_is_boolean($field)){
+                if ($value){
+                  $value = '"1"';
+                } else {
+                  $value = 'null';
+                }            
+            } else {
+              if (isset($value)){
+                $value = '"' . $value . '"';
+              }
+              else {
+                $value = '""';					  
+              }            
+            }
+            $set_list .= $field . ' = ' . $value . ', ';
+          }
+        }
+        $set_list = rtrim(rtrim($set_list),',');
+        $execute_sql = 'update ' . get_class($object) . ' set ' . $set_list . ' where id = ' . $object->id . ';';
+        $this->conn->query($execute_sql);
       }
 
   }
+
   public function Delete($object)
   {
     // TODO
@@ -176,21 +166,57 @@ final class DataLayer {
     $this->conn->query($execute_sql);
     return $this->conn->affected_rows;
   }
+  public function GetTableList(){
+    $retval = array();
+    $result = $this->conn->query('show tables;');
+    while($row = $result->fetch_array()) {
+      array_push($retval, $row[0]);
+    }
+    return $retval;
+  }
+  public function AddObjectColumns($object, $columns_to_add, $column_to_add_after){
+    $sql_statement = 'alter table ' . get_class($object);
+    foreach ($columns_to_add as $column_name){
+      $sql_statement .= " add column $column_name text after $column_to_add_after,";
+    }
+    $sql_statement = rtrim($sql_statement, ',');
+    $this->conn->query($sql_statement);
+  }
   public function DeleteProductParentData($object, $parenttable){
     $execute_sql = 'delete from ' . $parenttable . ' where productid = ' . $object->id;
     $this->conn->query($execute_sql);
     
   }
-  // public function GetParentProductIDs($object){
-  //   $productids = array();
-  //   $execute_sql = 'select id from product where ' . get_class($object) . 'id = ' . $object->id;
-  //   $result = $this->conn->query($execute_sql);
-  //   while($row = $result->fetch_assoc()) {
-  //     array_push($productids, $row['id']);
-  //   }
-  //   return $productids;
-  // }
-  
+  // We need to force NULL value in timestamp fields
+  // but the system mandates that timestamp fields must end with _ts
+  private static function field_is_timestamp($fieldname){
+    $retval = 1;  // default to 
+    $length = strlen('_ts');
+    if ($length == 0) {
+        $retval = 1;
+    } else { 
+      $retval = substr($fieldname, -$length) === '_ts' ? 1 : 0;
+    }
+    return $retval;    
+  }
+  // this is how the system will handle boolean values
+  // the table field must be a char(1) type
+  // true = ''
+  // false = NULL
+  // example:
+  //  defaultstatus_bool char(1) DEFAULT NULL,
+  // but the system mandates that boolean fields must end with _bool
+  private static function field_is_boolean($fieldname){
+    $retval = 1;  // default to 
+    $length = strlen('_bool');
+    if ($length == 0) {
+        $retval = 1;
+    } else { 
+      $retval = substr($fieldname, -$length) === '_bool' ? 1 : 0;
+    }
+    return $retval;    
+  }
+
 }
     
 
