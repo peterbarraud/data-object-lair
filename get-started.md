@@ -23,6 +23,7 @@ http://localhost:[port number]/[some folders]/rest.api.php/getobjectbyid/<id for
 
 - [table name].php - That inherits from objectbase.php
 - [table name]collection.php - That inhertis from objectcollectionbase.php
+
 For example, if you create an employee table, you need:
 - employee.php - That inherits from objectbase.php
 - employeecollection.php - That inhertis from objectcollectionbase.php
