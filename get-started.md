@@ -1,6 +1,6 @@
 # Get started with using the Object Lair
 1. Clone this repo
-<SLIM STUFF NEEDS TO GO HERE>
+2. <SLIM STUFF NEEDS TO GO HERE>
 2. This is a PHP-based framework, so you'll need PHP running on your computer.
 3. Either place these files into a folder that's accessible by your PHP installation or point to this folder.
 4. Point your PHP server to the main cloned folder. The one that has the phpinfo.php file in it.
