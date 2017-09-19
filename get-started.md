@@ -1,6 +1,14 @@
 # Get started with using the Object Lair
 1. Clone this repo
-2. [SLIM STUFF NEEDS TO GO HERE]
+
+What's with the `rest.api.php` file:
+
+This file exposes the object layer via RESTFul functions
+**Important**: The rest.api.php is dependent on the [SLIM Micro framework](https://www.slimframework.com/).
+
+This is required only to run the REST calls. It is not a requirement of the object layer. But if you want to test the layer via REST, you'll either need to download SLIM as a sibling folder of objectlayer. Or if you've got another framework you prefer, then, of course, you'll need to make the appropriate changes to the rest.api.php
+
+\2. [SLIM STUFF NEEDS TO GO HERE]
 2. This is a PHP-based framework, so you'll need PHP running on your computer.
 3. Either place these files into a folder that's accessible by your PHP installation or point to this folder.
 4. Point your PHP server to the main cloned folder. The one that has the phpinfo.php file in it.
