@@ -7,6 +7,7 @@
 5. If you want to check that you've got the setup right, open the browser and do:
 
 http://localhost:[port number]/[some folders]/phpinfo.php
+
 6. Open the datainfo.json file and put your mySQL connection data in there
 7. Create a table in your database called `appuser`.
 8. Make sure the `appuser` table primary key is `id` (*mandatory*)
@@ -16,6 +17,7 @@ http://localhost:[port number]/[some folders]/phpinfo.php
 12. And run the REST command:
 
 http://localhost:[port number]/[some folders]/rest.api.php/getobjectbyid/<id for an appuser record that you created>/
+
 13. If everything works fine, you're on your way.
 14. Now, for every object table that you create, you need to create two files in `objectlayer`:
 
