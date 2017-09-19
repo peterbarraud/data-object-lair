@@ -1,5 +1,6 @@
 # data-object-lair
 A simple PHP-based data object layer that you can easily use to set up RESTFul services in PHP
+tl;dr - Read the quick [Get started](https://github.com/peterbarraud/data-object-lair/blob/master/get-started.md)
 ## create a data object
 For every table that you create in your db, you'll need to create two data object files
 ### inherit from object base
