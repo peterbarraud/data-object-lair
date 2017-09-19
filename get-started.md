@@ -4,7 +4,7 @@
 3. Either place these files into a folder that's accessible by your PHP installation or point to this folder.
 4. Point your PHP server to the main cloned folder. The one that has the phpinfo.php file in it.
 5. If you want to check that you've got the setup right, open the browser and do:
-http://localhost:<port number>/<some folders>/phpinfo.php
+http://localhost:[port number]/[some folders]/phpinfo.php
 6. Open the datainfo.json file and put your mySQL connection data in there
 7. Create a table in your database called `appuser`.
 8. Make sure the `appuser` table primary key is `id` (*mandatory*)
