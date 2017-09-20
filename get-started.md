@@ -29,11 +29,9 @@ http://localhost:[port number]/[some folders]/rest.api.php/getobjectbyid/<id for
 13. If everything works fine, you're on your way.
 14. Now, for every object table that you create, you need to create two files in `objectlayer`:
 
-- [table name].php - That inherits from objectbase.php
-- [table name]collection.php - That inhertis from objectcollectionbase.php
+- `[*table name*].php` - That inherits from `objectbase.php`
+- `[*table name*]collection.php` - That inhertis from `objectcollectionbase.php`
 
 For example, if you create an employee table, you need:
-- employee.php - That inherits from objectbase.php
-- employeecollection.php - That inhertis from objectcollectionbase.php
-
-
+- `employee.php` - That inherits from `objectbase.php`
+- `employeecollection.php` - That inhertis from `objectcollectionbase.php`

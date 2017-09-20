@@ -37,15 +37,6 @@ final class DataLayer {
       $object->{$fieldinfo->name} = $row[$fieldinfo->name];
     }
   }
-
-  public function GetProductObjectDataByKeyword($product, $keyword){
-    $sql_statement = 'select * from product where keyword = "' . $keyword . '"';
-    $result = $this->conn->query($sql_statement);
-    $row = $result->fetch_assoc();
-    while ($fieldinfo = $result->fetch_field()) {
-      $product->{$fieldinfo->name} = $row[$fieldinfo->name];
-    }
-  }
   
   public function GetIdByFieldName($classname, $fieldname, $fieldvalue){
     $retval = null;
@@ -59,17 +50,6 @@ final class DataLayer {
     return $retval;
   }
 
-  public function GetKeywords(){
-    $retval = array();
-    $sql_statement = "select keyword from productlive";
-    $result = $this->conn->query($sql_statement);
-    while($row = $result->fetch_assoc()) {
-      array_push($retval, $row['keyword']);
-    }
-    return $retval;
-
-  }
-  
   public function GetObjectIds($classname, $filter=null, $sortby=null, $sortdirection=null){
     $retval = array();
     $sql_statement = "select id from $classname";
@@ -174,6 +154,7 @@ final class DataLayer {
     }
     return $retval;
   }
+
   public function AddObjectColumns($object, $columns_to_add, $column_to_add_after){
     $sql_statement = 'alter table ' . get_class($object);
     foreach ($columns_to_add as $column_name){
@@ -181,11 +162,6 @@ final class DataLayer {
     }
     $sql_statement = rtrim($sql_statement, ',');
     $this->conn->query($sql_statement);
-  }
-  public function DeleteProductParentData($object, $parenttable){
-    $execute_sql = 'delete from ' . $parenttable . ' where productid = ' . $object->id;
-    $this->conn->query($execute_sql);
-    
   }
   // We need to force NULL value in timestamp fields
   // but the system mandates that timestamp fields must end with _ts

@@ -43,6 +43,11 @@ We're using a decorator pattern type approach here.
 
 So if you want to add functionality to your object, you should be adding that to your own class not meddling around with the base class
 
+## Using the data object
+For each data object that you create, you can do the following
+
+## Using the data object collection
+
 ## Use RESTFul frameworks
 By definitiion, the framework is not about how you expose this to clients. It's simply an easy-to-use object structure that allows you to set up your database and then put together (with pretty much no effort) a object layter that gives your PHP access to your database.
 
