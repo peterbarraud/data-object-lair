@@ -21,8 +21,8 @@ For boolean values, you need to create a `char(1)` field. Where `''` is true and
 After you get the object instance, go ahead change / set property values. Call `[*data object*]->Save()` and you're done.
 - If the instance has an `id`, we will update the existing record
 - If the `id` is `NULL`, we'll create a new record.
-### Override duplicate
-~~A VERY BAD IDEA~~
+### ~~Override duplicate~~
+~~A VERY BAD IDEA
 This is a special case and it requires that you have a `name` field in your table
 
 So let's say you create a new record and that record has a `name` identical to a name for a record that already exists.
