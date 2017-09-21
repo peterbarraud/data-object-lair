@@ -22,14 +22,14 @@ After you get the object instance, go ahead change / set property values. Call `
 - If the instance has an `id`, we will update the existing record
 - If the `id` is `NULL`, we'll create a new record.
 ### ~~Override duplicate~~
-~~A VERY BAD IDEA
-This is a special case and it requires that you have a `name` field in your table
+~~A VERY BAD IDEA~~
+~~This is a special case and it requires that you have a `name` field in your table~~
 
-So let's say you create a new record and that record has a `name` identical to a name for a record that already exists.
+~~So let's say you create a new record and that record has a `name` identical to a name for a record that already exists.~~
 
-If you want duplicate records with the same `name` value, then you're fine just going through the motions.
+~~If you want duplicate records with the same `name` value, then you're fine just going through the motions.~~
 
-However, if you want to update a record if the `name` is the same. Even if the `id` is NULL, then you'll need to pass in (*the optional*) override_duplicate boolean parameter as `TRUE`.~~
+~~However, if you want to update a record if the `name` is the same. Even if the `id` is NULL, then you'll need to pass in (*the optional*) override_duplicate boolean parameter as `TRUE`.~~
 
 ## Delete
 This one's pretty straightforward. Just create an instance and Call `[*data object*]->Delete()`.
