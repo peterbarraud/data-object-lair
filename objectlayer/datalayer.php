@@ -70,16 +70,7 @@ final class DataLayer {
     return $retval;
   }
 
-  public function Save($object, $override_duplicate=FALSE){
-    if ($override_duplicate){
-      // check if a record with this "name" exists
-      $sql_statement = 'select id from ' . get_class($object) . ' where name = "' . $object->name . '";';
-      $result = $this->conn->query($sql_statement);
-      $record = $result->fetch_array();
-      if ($record[0]){
-        $object->id = $record[0];
-      }    
-    }
+  public function Save($object){
     //   insert if object id is null
       if ($object->id == null){
         $field_list = '';

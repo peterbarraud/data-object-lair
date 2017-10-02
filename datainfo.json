@@ -1,6 +1,6 @@
 {
 	"server": "localhost",
-	"username": "<user name>",
-	"password": "<password>",
-	"database": "<database name>"
+	"username": "dunko",
+	"password": "dunko07",
+	"database": "dunkodb"
 }
